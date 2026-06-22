@@ -7,9 +7,14 @@ services:
       - "8222:8222"
 
   client-gateway:
-    build: ./client-gateway
+    build:
+      context: ./client-gateway
+      args:
+        HTTP_PROXY: "http://emanuel:02022479786@10.12.0.205:3128"
+        HTTPS_PROXY: "http://emanuel:02022479786@10.12.0.205:3128"
+        NO_PROXY: "localhost,127.0.0.1,127.0.0.0/8,::1,.xetid.cu"
     ports:
-      - "3000:3000"
+      - ${CLIENT_GATEWAY_PORT}:3000
     volumes:
       - ./client-gateway/src:/usr/src/app/src
     command: npm run start:dev
@@ -18,7 +23,12 @@ services:
       - NATS_SERVERS=nats://nats-server:4222
 
   products-ms:
-    build: ./products-ms
+    build:
+      context: ./products-ms
+      args:
+        HTTP_PROXY: "http://emanuel:02022479786@10.12.0.205:3128"
+        HTTPS_PROXY: "http://emanuel:02022479786@10.12.0.205:3128"
+        NO_PROXY: "localhost,127.0.0.1,127.0.0.0/8,::1,.xetid.cu"
     volumes:
       - ./products-ms/src:/usr/src/app/src
     command: npm run start:dev
@@ -30,7 +40,12 @@ services:
   orders-ms:
     depends_on:
       - orders-db
-    build: ./orders-ms
+    build:
+      context: ./orders-ms
+      args:
+        HTTP_PROXY: "http://emanuel:02022479786@10.12.0.205:3128"
+        HTTPS_PROXY: "http://emanuel:02022479786@10.12.0.205:3128"
+        NO_PROXY: "localhost,127.0.0.1,127.0.0.0/8,::1,.xetid.cu"
     volumes:
       - ./orders-ms/src:/usr/src/app/src
     command: npm run start:dev
@@ -45,7 +60,12 @@ services:
 
   payments-ms:
     container_name: payments-ms
-    build: ./payments-ms
+    build:
+      context: ./payments-ms
+      args:
+        HTTP_PROXY: "http://emanuel:02022479786@10.12.0.205:3128"
+        HTTPS_PROXY: "http://emanuel:02022479786@10.12.0.205:3128"
+        NO_PROXY: "localhost,127.0.0.1,127.0.0.0/8,::1,.xetid.cu"
     volumes:
       - ./payments-ms/src:/usr/src/app/src
     command: npm run start:dev
