@@ -39,6 +39,18 @@ services:
       - DATABASE_URL=postgresql://postgres:123456@orders-db:5432/ordersdb?schema=public
       - NATS_SERVERS=nats://nats-server:4222
 
+  auth-ms:
+    build: ./auth-ms
+    depends_on:
+      - auth-db
+    volumes:
+      - ./auth-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3004
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=${AUTH_DATABASE_URL}
+
   # =======================
   # Payments Microservice
   # =======================
@@ -72,5 +84,24 @@ services:
       - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=ordersdb
 
+  auth-db:
+    container_name: auth_database
+    image: mongo:7.0
+    restart: always
+    command: ["mongod", "--bind_ip_all", "--replSet", "rs0"]
+    volumes:
+      - auth-db-data:/data/db
+    ports:
+      - "27017:27017"
+
+  mongo-init:
+    image: mongo:7.0
+    depends_on:
+      - auth-db
+    volumes:
+      - ./mongo-init.sh:/mongo-init.sh
+    command: sh /mongo-init.sh
+
 volumes:
   orders-db-data:
+  auth-db-data:
