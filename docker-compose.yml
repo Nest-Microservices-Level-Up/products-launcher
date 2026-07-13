@@ -36,7 +36,7 @@ services:
     command: npm run start:dev
     environment:
       - PORT=3002
-      - DATABASE_URL=postgresql://postgres:123456@orders-db:5432/ordersdb?schema=public
+      - DATABASE_URL=${ORDERS_DATABASE_URL}
       - NATS_SERVERS=nats://nats-server:4222
 
   auth-ms:

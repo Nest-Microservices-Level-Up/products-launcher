@@ -37,3 +37,13 @@ git submodule update --remote
 If you are working in a repository that contains submodules, **first update and push** the submodule, and **then** update and push the main repository.
 
 If you do it the other way around, submodule references in the main repository may be lost, and you will need to resolve conflicts.
+
+
+## Prod
+1. Clone the repository.
+2. Create a .env file based on the .env.template file.
+3. Run the following command
+
+```
+docker compose -f docker-compose.prod.yml build
+```
